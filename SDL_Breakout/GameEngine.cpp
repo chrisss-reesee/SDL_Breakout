@@ -1,8 +1,7 @@
 #include "GameEngine.h"
 #include <iostream>
 
-
-GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr)
+GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::PLAY)
 {
 }
 
@@ -13,12 +12,12 @@ GameEngine::~GameEngine()
 	_renderer = nullptr;
 	SDL_DestroyWindow(_window);
 	_window = nullptr;
-	SDL_Quit();
 }
 
 void GameEngine::run()
 {
 	initSystems();
+	gameLoop();
 }
 
 void GameEngine::initSystems()
@@ -36,5 +35,30 @@ void GameEngine::initSystems()
 	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 	if (_renderer == NULL) {
 		std::cout << SDL_GetError() << std::endl;
+	}
+}
+
+void GameEngine::gameLoop()
+{
+	while (gameState == GameState::PLAY) {
+		handleInput();
+	}
+
+}
+
+
+void GameEngine::handleInput()
+{
+	SDL_Event evnt;
+
+	while (SDL_PollEvent(&evnt)) {
+		switch (evnt.type)
+		{
+		case SDL_QUIT:
+			gameState = GameState::EXIT;
+			break;
+		default:
+			break;			
+		}
 	}
 }
