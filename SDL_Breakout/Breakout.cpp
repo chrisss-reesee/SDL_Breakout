@@ -1,8 +1,10 @@
 #include <SDL/SDL.h>
+#include "GameEngine.h"
 
 int main(int argc, char** argv) {
 
-	SDL_Init(SDL_INIT_EVERYTHING);
+	GameEngine gameEngine;
+	gameEngine.run();
 
 	return 0;
 }
