@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL/SDL.h>
+#include "Environment.h"
 
 enum class GameState { PLAY, EXIT };
 
@@ -14,7 +15,7 @@ public:
 	void initSystems();
 	void gameLoop();
 	void handleInput();
-	void exit();
+	void render();
 
 	int screenWidth;
 	int screenHeight;
@@ -23,6 +24,7 @@ public:
 private:
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
+	Environment* _environment;
 	
 };
 

@@ -8,6 +8,8 @@ GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr
 
 GameEngine::~GameEngine()
 {
+	delete _environment;
+	_environment = nullptr;
 	SDL_DestroyRenderer(_renderer);
 	_renderer = nullptr;
 	SDL_DestroyWindow(_window);
@@ -32,16 +34,23 @@ void GameEngine::initSystems()
 	}
 
 	// Create Renderer
-	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_TARGETTEXTURE);
 	if (_renderer == NULL) {
 		std::cout << SDL_GetError() << std::endl;
 	}
+
+	// Create Environment
+	_environment = new Environment(_renderer);
 }
 
 void GameEngine::gameLoop()
 {
 	while (gameState == GameState::PLAY) {
+		SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
+		SDL_RenderClear(_renderer);
 		handleInput();
+		render();
+		SDL_RenderPresent(_renderer);
 	}
 
 }
@@ -61,4 +70,10 @@ void GameEngine::handleInput()
 			break;			
 		}
 	}
+}
+
+void GameEngine::render()
+{
+	// Draw Background
+	_environment->drawBackground(_renderer);
 }
