@@ -9,16 +9,16 @@ public:
 	Paddle(SDL_Renderer* renderer);
 	~Paddle();
 
-	void draw(SDL_Renderer* renderer);
+	void draw();
 	void update();
 
+	SDL_Renderer* renderer;
 	SDL_Texture* paddleTexture;
 
 private:
 
 	int _paddleWidth;
 	int _paddleHeight;
-
 	
 	SDL_Rect _playerPaddle;
 };

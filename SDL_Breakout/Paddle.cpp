@@ -1,7 +1,7 @@
 #include "Paddle.h"
 #include <iostream>
 
-Paddle::Paddle(SDL_Renderer* renderer) : _paddleWidth(1024/8), _paddleHeight(20)
+Paddle::Paddle(SDL_Renderer* renderer) : _paddleWidth(1024 / 8), _paddleHeight(20), renderer(renderer)
 {
 	// Create Paddle Texture
 	paddleTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _paddleWidth, _paddleHeight);
@@ -18,12 +18,11 @@ Paddle::Paddle(SDL_Renderer* renderer) : _paddleWidth(1024/8), _paddleHeight(20)
 	_playerPaddle = newPaddle;
 }
 
-
 Paddle::~Paddle()
 {
 }
 
-void Paddle::draw(SDL_Renderer* renderer)
+void Paddle::draw()
 {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
@@ -32,5 +31,5 @@ void Paddle::draw(SDL_Renderer* renderer)
 
 void Paddle::update()
 {
-
+	draw();
 }
