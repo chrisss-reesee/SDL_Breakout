@@ -1,7 +1,9 @@
 #pragma once
 
 #include <SDL/SDL.h>
+
 #include "Environment.h"
+#include "Paddle.h"
 
 enum class GameState { PLAY, EXIT };
 
@@ -25,6 +27,7 @@ private:
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
 	Environment* _environment;
+	Paddle* _paddle;
 	
 };
 

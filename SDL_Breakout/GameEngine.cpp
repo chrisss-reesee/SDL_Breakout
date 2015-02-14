@@ -41,6 +41,9 @@ void GameEngine::initSystems()
 
 	// Create Environment
 	_environment = new Environment(_renderer);
+
+	//Create Paddle
+	_paddle = new Paddle(_renderer);
 }
 
 void GameEngine::gameLoop()
@@ -77,5 +80,8 @@ void GameEngine::render()
 {
 	// Draw Background
 	_environment->drawBackground(_renderer);
+	_paddle->draw(_renderer);
+	SDL_RenderCopy(_renderer, _paddle->paddleTexture, NULL, NULL);
 	SDL_RenderCopy(_renderer, _environment->wall, NULL, NULL);
+
 }
