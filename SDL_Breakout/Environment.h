@@ -13,6 +13,8 @@ public:
 	SDL_Rect topBorder;
 	SDL_Rect rightBorder;
 
+	SDL_Texture* wall;
+
 private:
 
 };

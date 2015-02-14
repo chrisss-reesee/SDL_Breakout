@@ -46,6 +46,7 @@ void GameEngine::initSystems()
 void GameEngine::gameLoop()
 {
 	while (gameState == GameState::PLAY) {
+		SDL_SetRenderTarget(_renderer, NULL);
 		SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
 		SDL_RenderClear(_renderer);
 		handleInput();
@@ -76,4 +77,5 @@ void GameEngine::render()
 {
 	// Draw Background
 	_environment->drawBackground(_renderer);
+	SDL_RenderCopy(_renderer, _environment->wall, NULL, NULL);
 }
