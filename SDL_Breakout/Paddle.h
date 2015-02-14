@@ -11,6 +11,7 @@ public:
 
 	void draw();
 	void update();
+	void setX(SDL_Event evnt);
 
 	SDL_Renderer* renderer;
 	SDL_Texture* paddleTexture;

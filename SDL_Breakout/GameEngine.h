@@ -17,6 +17,7 @@ public:
 	void initSystems();
 	void gameLoop();
 	void handleInput();
+	void update();
 	void render();
 
 	int screenWidth;

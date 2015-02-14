@@ -7,12 +7,14 @@ public:
 	Environment(SDL_Renderer* renderer);
 	~Environment();
 
-	void drawBackground(SDL_Renderer* renderer);
+	void draw();
+	void update();
 
 	SDL_Rect leftBorder;
 	SDL_Rect topBorder;
 	SDL_Rect rightBorder;
 
+	SDL_Renderer* renderer;
 	SDL_Texture* wall;
 
 private:

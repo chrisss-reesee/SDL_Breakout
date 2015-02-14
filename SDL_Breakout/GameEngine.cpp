@@ -41,6 +41,7 @@ void GameEngine::initSystems()
 
 	// Create Environment
 	_environment = new Environment(_renderer);
+	_environment->renderer = _renderer;
 
 	//Create Paddle
 	_paddle = new Paddle(_renderer);
@@ -50,16 +51,11 @@ void GameEngine::initSystems()
 void GameEngine::gameLoop()
 {
 	while (gameState == GameState::PLAY) {
-		SDL_SetRenderTarget(_renderer, NULL);
-		SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
-		SDL_RenderClear(_renderer);
 		handleInput();
+		update();
 		render();
-		SDL_RenderPresent(_renderer);
 	}
-
 }
-
 
 void GameEngine::handleInput()
 {
@@ -71,6 +67,9 @@ void GameEngine::handleInput()
 		case SDL_QUIT:
 			gameState = GameState::EXIT;
 			break;
+		case SDL_MOUSEMOTION:
+			_paddle->setX(evnt);
+			break;
 		default:
 			break;			
 		}
@@ -79,10 +78,19 @@ void GameEngine::handleInput()
 
 void GameEngine::render()
 {
-	// Draw Background
-	_environment->drawBackground(_renderer);
-	_paddle->update();
-	SDL_RenderCopy(_renderer, _paddle->paddleTexture, NULL, NULL);
-	SDL_RenderCopy(_renderer, _environment->wall, NULL, NULL);
+	// Clear Screen
+	SDL_SetRenderTarget(_renderer, NULL);
+	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
+	SDL_RenderClear(_renderer);
 
+	update();
+
+	// Render to the Screen
+	SDL_RenderPresent(_renderer);
+}
+
+void GameEngine::update()
+{
+	_environment->update();
+	_paddle->update();	
 }
