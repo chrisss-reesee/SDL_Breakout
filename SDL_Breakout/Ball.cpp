@@ -61,12 +61,12 @@ void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topB
 	//Paddle Collision Box Definitions
 
 	// If Ball hits Paddle
-	if (_ball.y >= paddle->y && _ball.y <= (paddle->y + paddle->h) && _ball.x >= paddle->x && (_ball.x <= paddle->x + paddle->w) ) {
+	if (_ball.y >= paddle->y - _ballHeight && _ball.y <= (paddle->y + paddle->h) && _ball.x >= paddle->x && (_ball.x <= paddle->x + paddle->w) ) {
 		_yDirection = YDirection::UP;
 	}
 
 	// Right Wall Collision Detection
-	if (_ball.x >= rightBorder->x) {
+	if (_ball.x >= rightBorder->x - _ball.w) {
 		_xDirection = XDirection::LEFT;
 	}
 
