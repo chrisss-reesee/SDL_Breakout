@@ -63,6 +63,7 @@ void GameEngine::gameLoop()
 		handleInput();
 		update();
 		render();
+		SDL_Delay(6);
 	}
 }
 
