@@ -1,4 +1,5 @@
 #include "Ball.h"
+#include <iostream>
 
 
 Ball::Ball(SDL_Renderer* renderer, int screenWidth, int screenHeight) : _ballHeight(12), _ballWidth(12), _ballSpeed(2.0f),
@@ -9,7 +10,7 @@ _xDirection(XDirection::RIGHT), _yDirection(YDirection::DOWN)
 	//Set Blend mode
 	SDL_SetTextureBlendMode(ballTexture, SDL_BLENDMODE_BLEND);
 	//Create Ball Rect
-	SDL_Rect newBall = { screenWidth / 2, screenHeight - 75, _ballHeight, _ballWidth };
+	SDL_Rect newBall = { screenWidth / 2, screenHeight - 376, _ballHeight, _ballWidth };
 	_ball = newBall;
 }
 
@@ -55,7 +56,30 @@ void Ball::movement()
 	}
 }
 
-void Ball::checkCollision()
+void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder)
 {
+	//Paddle Collision Box Definitions
 
+	// If Ball hits Paddle
+	if (_ball.y >= paddle->y && _ball.y <= (paddle->y + paddle->h) && _ball.x >= paddle->x && (_ball.x <= paddle->x + paddle->w) ) {
+		_yDirection = YDirection::UP;
+	}
+
+	// Right Wall Collision Detection
+	if (_ball.x >= rightBorder->x) {
+		_xDirection = XDirection::LEFT;
+	}
+
+	// Top Border Collision Detection
+	if (_ball.y <= topBorder->y + topBorder->h) {
+		_yDirection = YDirection::DOWN;
+	}
+
+	// Left Border Collision
+	if (_ball.x <= leftBorder->x + leftBorder->w) {
+		_xDirection = XDirection::RIGHT;
+	}
+
+
+	
 }

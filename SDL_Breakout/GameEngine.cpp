@@ -61,6 +61,7 @@ void GameEngine::gameLoop()
 {
 	while (gameState == GameState::PLAY) {
 		handleInput();
+		_ball->checkCollision(&_paddle->playerPaddle, &_environment->leftBorder, &_environment->topBorder, &_environment->rightBorder);
 		update();
 		render();
 		SDL_Delay(6);

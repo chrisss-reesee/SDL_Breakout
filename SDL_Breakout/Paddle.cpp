@@ -13,7 +13,7 @@ Paddle::Paddle(SDL_Renderer* renderer, int screenWidth, int ScreenHeight) : rend
 	SDL_SetTextureBlendMode(paddleTexture, SDL_BLENDMODE_BLEND);
 	// Create Rect
 	SDL_Rect newPaddle = { screenWidth / 2, ScreenHeight - 40, _paddleWidth, _paddleHeight };
-	_playerPaddle = newPaddle;
+	playerPaddle = newPaddle;
 }
 
 Paddle::~Paddle()
@@ -24,7 +24,7 @@ void Paddle::draw()
 {
 	// Draw The Paddle
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderFillRect(renderer, &_playerPaddle);
+	SDL_RenderFillRect(renderer, &playerPaddle);
 	SDL_RenderCopy(renderer, paddleTexture, NULL, NULL);
 }
 
@@ -36,12 +36,12 @@ void Paddle::update()
 void Paddle::setX(SDL_Event evnt)
 {
 	if (evnt.motion.x < 20) {
-		_playerPaddle.x = 20;
+		playerPaddle.x = 20;
 	}
 	else if (evnt.motion.x > (1004 - _paddleWidth)) {
-		_playerPaddle.x = (1004 - _paddleWidth);
+		playerPaddle.x = (1004 - _paddleWidth);
 	}
 	else {
-		_playerPaddle.x = evnt.motion.x;
+		playerPaddle.x = evnt.motion.x;
 	}
 }

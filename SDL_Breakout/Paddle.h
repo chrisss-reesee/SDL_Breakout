@@ -15,12 +15,13 @@ public:
 
 	SDL_Renderer* renderer;
 	SDL_Texture* paddleTexture;
+	SDL_Rect playerPaddle;
 
 private:
 
 	int _paddleWidth;
 	int _paddleHeight;
 	
-	SDL_Rect _playerPaddle;
+	
 };
 
