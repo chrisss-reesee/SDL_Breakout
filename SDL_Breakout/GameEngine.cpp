@@ -1,13 +1,18 @@
 #include "GameEngine.h"
 #include <iostream>
 
-GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::PLAY)
+GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::PLAY),
+						   _ball(nullptr), _environment(nullptr), _paddle(nullptr)
 {
 }
 
 
 GameEngine::~GameEngine()
 {
+	delete _ball;
+	_ball = nullptr;
+	delete _paddle;
+	_paddle = nullptr;
 	delete _environment;
 	_environment = nullptr;
 	SDL_DestroyRenderer(_renderer);
@@ -44,8 +49,12 @@ void GameEngine::initSystems()
 	_environment->renderer = _renderer;
 
 	//Create Paddle
-	_paddle = new Paddle(_renderer);
+	_paddle = new Paddle(_renderer, screenWidth, screenHeight);
 	_paddle->renderer = _renderer;
+
+	// Create Ball
+	_ball = new Ball(_renderer, screenWidth, screenHeight);
+	_ball->renderer = _renderer;
 }
 
 void GameEngine::gameLoop()
@@ -91,6 +100,7 @@ void GameEngine::render()
 
 void GameEngine::update()
 {
+	_ball->update();
 	_environment->update();
 	_paddle->update();	
 }

@@ -2,6 +2,7 @@
 
 #include <SDL/SDL.h>
 
+#include "Ball.h"
 #include "Environment.h"
 #include "Paddle.h"
 
@@ -27,6 +28,8 @@ public:
 private:
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
+
+	Ball* _ball;
 	Environment* _environment;
 	Paddle* _paddle;
 	

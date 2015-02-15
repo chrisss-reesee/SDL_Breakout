@@ -6,7 +6,7 @@ class Paddle :
 	public GameObject
 {
 public:
-	Paddle(SDL_Renderer* renderer);
+	Paddle(SDL_Renderer* renderer, int screenWidth, int screenHeight);
 	~Paddle();
 
 	void draw();
