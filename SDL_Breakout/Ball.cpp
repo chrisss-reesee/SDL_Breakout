@@ -2,8 +2,8 @@
 #include <iostream>
 
 
-Ball::Ball(SDL_Renderer* renderer, int screenWidth, int screenHeight) : _ballHeight(12), _ballWidth(12), _ballSpeed(2.0f),
-_xDirection(XDirection::RIGHT), _yDirection(YDirection::DOWN)
+Ball::Ball(SDL_Renderer* renderer, int screenWidth, int screenHeight, GameState* gameState, Paddle* paddle) : _ballHeight(12), _ballWidth(12), _ballSpeed(2.0f),
+_xDirection(XDirection::RIGHT), _yDirection(YDirection::DOWN), currentGameState(gameState), paddle(paddle)
 {
 	// Create Texture
 	ballTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, _ballWidth, _ballHeight);
@@ -34,26 +34,33 @@ void Ball::update()
 
 void Ball::movement()
 {
-	if (_xDirection == XDirection::RIGHT) {
-		if (_yDirection == YDirection::DOWN) {
-			_ball.x += _ballSpeed;
-			_ball.y += _ballSpeed;
+	if (*currentGameState == GameState::PLAY) {
+		if (_xDirection == XDirection::RIGHT) {
+			if (_yDirection == YDirection::DOWN) {
+				_ball.x += _ballSpeed;
+				_ball.y += _ballSpeed;
+			}
+			else if (_yDirection == YDirection::UP) {
+				_ball.x += _ballSpeed;
+				_ball.y -= _ballSpeed;
+			}
 		}
-		else if (_yDirection == YDirection::UP) {
-			_ball.x += _ballSpeed;
-			_ball.y -= _ballSpeed;
+		else if (_xDirection == XDirection::LEFT) {
+			if (_yDirection == YDirection::DOWN) {
+				_ball.x -= _ballSpeed;
+				_ball.y += _ballSpeed;
+			}
+			else if (_yDirection == YDirection::UP) {
+				_ball.x -= _ballSpeed;
+				_ball.y -= _ballSpeed;
+			}
 		}
 	}
-	else if (_xDirection == XDirection::LEFT) {
-		if (_yDirection == YDirection::DOWN) {
-			_ball.x -= _ballSpeed;
-			_ball.y += _ballSpeed;
-		}
-		else if (_yDirection == YDirection::UP) {
-			_ball.x -= _ballSpeed;
-			_ball.y -= _ballSpeed;
-		}
+	else if (*currentGameState == GameState::LAUNCH_PHASE) {
+		_ball.x = paddle->playerPaddle.x + (paddle->playerPaddle.w / 2);
+		_ball.y = paddle->playerPaddle.y - (_ballHeight + 10);
 	}
+
 }
 
 void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder, Mix_Chunk* bounceSfx)
@@ -84,4 +91,10 @@ void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topB
 		Mix_PlayChannel(-1, bounceSfx, 0);
 	}
 
+}
+
+void Ball::resetBall(float x, float y)
+{
+	_ball.x = x;
+	_ball.y = y;
 }

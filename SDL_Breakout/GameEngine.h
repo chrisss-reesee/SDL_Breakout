@@ -6,9 +6,7 @@
 #include "Ball.h"
 #include "Environment.h"
 #include "Paddle.h"
-
-
-enum class GameState { PLAY, EXIT };
+#include "GameStateManager.h"
 
 class GameEngine
 {
@@ -23,6 +21,7 @@ public:
 	void handleInput();
 	void update();
 	void render();
+	void checkGameState();
 
 	int screenWidth;
 	int screenHeight;

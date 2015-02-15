@@ -1,7 +1,7 @@
 #include "GameEngine.h"
 #include <iostream>
 
-GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::PLAY),
+GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::LAUNCH_PHASE),
 						   _ball(nullptr), _environment(nullptr), _bounce(nullptr), _paddle(nullptr)
 {
 }
@@ -51,7 +51,6 @@ void GameEngine::initSystems()
 
 }
 
-
 void GameEngine::loadMedia()
 {
 	// Graphics ///////////////////////////////////////////////////////
@@ -64,7 +63,7 @@ void GameEngine::loadMedia()
 	_paddle->renderer = _renderer;
 
 	// Create Ball
-	_ball = new Ball(_renderer, screenWidth, screenHeight);
+	_ball = new Ball(_renderer, screenWidth, screenHeight, &gameState, _paddle);
 	_ball->renderer = _renderer;
 
 	// Audio //////////////////////////////////////////////////////////
@@ -80,11 +79,12 @@ void GameEngine::loadMedia()
 
 void GameEngine::gameLoop()
 {
-	while (gameState == GameState::PLAY) {
+	while (gameState != GameState::EXIT) {
 		handleInput();
 		_ball->checkCollision(&_paddle->playerPaddle, &_environment->leftBorder, &_environment->topBorder, &_environment->rightBorder, _bounce);
 		update();
 		render();
+		checkGameState();
 		SDL_Delay(6);
 	}
 }
@@ -102,6 +102,10 @@ void GameEngine::handleInput()
 		case SDL_MOUSEMOTION:
 			_paddle->setX(evnt);
 			break;
+		case SDL_KEYDOWN:
+			if (evnt.key.keysym.scancode == SDL_SCANCODE_SPACE && gameState == GameState::LAUNCH_PHASE) {
+				gameState = GameState::PLAY;
+			}
 		default:
 			break;			
 		}
@@ -126,4 +130,12 @@ void GameEngine::update()
 	_ball->update();
 	_environment->update();
 	_paddle->update();	
+}
+
+void GameEngine::checkGameState()
+{
+	// Ball Goes Past Paddle
+	if (_ball->getBallYPos() > screenHeight) {
+		gameState = GameState::LAUNCH_PHASE;
+	}
 }
