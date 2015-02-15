@@ -35,5 +35,13 @@ void Paddle::update()
 
 void Paddle::setX(SDL_Event evnt)
 {
-	_playerPaddle.x = evnt.motion.x;
+	if (evnt.motion.x < 20) {
+		_playerPaddle.x = 20;
+	}
+	else if (evnt.motion.x > (1004 - _paddleWidth)) {
+		_playerPaddle.x = (1004 - _paddleWidth);
+	}
+	else {
+		_playerPaddle.x = evnt.motion.x;
+	}
 }
