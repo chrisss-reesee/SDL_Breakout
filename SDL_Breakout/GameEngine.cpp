@@ -2,12 +2,14 @@
 #include <iostream>
 
 GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::LAUNCH_PHASE),
-						   _ball(nullptr), _environment(nullptr), _bounce(nullptr), _paddle(nullptr)
+						   _ball(nullptr), _environment(nullptr), _bounce(nullptr), _explosion(nullptr), _paddle(nullptr)
 {
 }
 
 GameEngine::~GameEngine()
 {
+	Mix_FreeChunk(_explosion);
+	_explosion = nullptr;
 	Mix_FreeChunk(_bounce);
 	_bounce = nullptr;
 	delete _ball;
@@ -72,7 +74,11 @@ void GameEngine::loadMedia()
 	if (_bounce == NULL) {
 		std::cout << Mix_GetError() << std::endl;
 	}
-
+	// Ball Explode SFX
+	_explosion = Mix_LoadWAV("explosion.wav");
+	if (_explosion == NULL) {
+		std::cout << Mix_GetError() << std::endl;
+	}
 
 }
 
@@ -136,6 +142,8 @@ void GameEngine::checkGameState()
 {
 	// Ball Goes Past Paddle
 	if (_ball->getBallYPos() > screenHeight) {
+		Mix_PlayChannel(-1, _explosion, 0);
 		gameState = GameState::LAUNCH_PHASE;
+		
 	}
 }

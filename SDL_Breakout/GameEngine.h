@@ -34,6 +34,7 @@ private:
 	Ball* _ball;
 	Environment* _environment;
 	Mix_Chunk* _bounce;
+	Mix_Chunk* _explosion;
 	Paddle* _paddle;
 	
 };
