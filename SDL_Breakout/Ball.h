@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Paddle.h"
+#include <SDL/SDL_mixer.h>
 
 enum class XDirection {LEFT, RIGHT};
 enum class YDirection {UP, DOWN};
@@ -14,7 +15,7 @@ public:
 	
 	void draw();
 	void update();
-	void checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder);
+	void checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder, Mix_Chunk* bounceSfx);
 
 	SDL_Renderer* renderer;
 	SDL_Texture* ballTexture;
@@ -33,6 +34,5 @@ private:
 	float _ballHeight;
 	float _ballSpeed;
 
-	
 };
 

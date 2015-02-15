@@ -1,10 +1,12 @@
 #pragma once
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
 #include "Ball.h"
 #include "Environment.h"
 #include "Paddle.h"
+
 
 enum class GameState { PLAY, EXIT };
 
@@ -16,6 +18,7 @@ public:
 
 	void run();
 	void initSystems();
+	void loadMedia();
 	void gameLoop();
 	void handleInput();
 	void update();
@@ -31,6 +34,7 @@ private:
 
 	Ball* _ball;
 	Environment* _environment;
+	Mix_Chunk* _bounce;
 	Paddle* _paddle;
 	
 };

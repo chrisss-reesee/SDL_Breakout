@@ -56,30 +56,32 @@ void Ball::movement()
 	}
 }
 
-void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder)
+void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder, Mix_Chunk* bounceSfx)
 {
 	//Paddle Collision Box Definitions
 
 	// If Ball hits Paddle
 	if (_ball.y >= paddle->y - _ballHeight && _ball.y <= (paddle->y + paddle->h) && _ball.x >= paddle->x && (_ball.x <= paddle->x + paddle->w) ) {
 		_yDirection = YDirection::UP;
+		Mix_PlayChannel(-1, bounceSfx, 0);
 	}
 
 	// Right Wall Collision Detection
 	if (_ball.x >= rightBorder->x - _ball.w) {
 		_xDirection = XDirection::LEFT;
+		Mix_PlayChannel(-1, bounceSfx, 0);
 	}
 
 	// Top Border Collision Detection
 	if (_ball.y <= topBorder->y + topBorder->h) {
 		_yDirection = YDirection::DOWN;
+		Mix_PlayChannel(-1, bounceSfx, 0);
 	}
 
 	// Left Border Collision
 	if (_ball.x <= leftBorder->x + leftBorder->w) {
 		_xDirection = XDirection::RIGHT;
+		Mix_PlayChannel(-1, bounceSfx, 0);
 	}
 
-
-	
 }

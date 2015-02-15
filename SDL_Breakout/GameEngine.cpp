@@ -2,13 +2,14 @@
 #include <iostream>
 
 GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::PLAY),
-						   _ball(nullptr), _environment(nullptr), _paddle(nullptr)
+						   _ball(nullptr), _environment(nullptr), _bounce(nullptr), _paddle(nullptr)
 {
 }
 
-
 GameEngine::~GameEngine()
 {
+	Mix_FreeChunk(_bounce);
+	_bounce = nullptr;
 	delete _ball;
 	_ball = nullptr;
 	delete _paddle;
@@ -24,6 +25,7 @@ GameEngine::~GameEngine()
 void GameEngine::run()
 {
 	initSystems();
+	loadMedia();
 	gameLoop();
 }
 
@@ -31,6 +33,9 @@ void GameEngine::initSystems()
 {
 	// Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
+
+	// Initialize SDL_Mixer
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
 	// Create SDL Window
 	_window = SDL_CreateWindow("SDL2 Breakout", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_OPENGL);
@@ -44,6 +49,12 @@ void GameEngine::initSystems()
 		std::cout << SDL_GetError() << std::endl;
 	}
 
+}
+
+
+void GameEngine::loadMedia()
+{
+	// Graphics ///////////////////////////////////////////////////////
 	// Create Environment
 	_environment = new Environment(_renderer);
 	_environment->renderer = _renderer;
@@ -55,13 +66,23 @@ void GameEngine::initSystems()
 	// Create Ball
 	_ball = new Ball(_renderer, screenWidth, screenHeight);
 	_ball->renderer = _renderer;
+
+	// Audio //////////////////////////////////////////////////////////
+	// Ball Ricochet SFX
+	_bounce = Mix_LoadWAV("bounce.wav");
+	if (_bounce == NULL) {
+		std::cout << Mix_GetError() << std::endl;
+	}
+
+
 }
+
 
 void GameEngine::gameLoop()
 {
 	while (gameState == GameState::PLAY) {
 		handleInput();
-		_ball->checkCollision(&_paddle->playerPaddle, &_environment->leftBorder, &_environment->topBorder, &_environment->rightBorder);
+		_ball->checkCollision(&_paddle->playerPaddle, &_environment->leftBorder, &_environment->topBorder, &_environment->rightBorder, _bounce);
 		update();
 		render();
 		SDL_Delay(6);
