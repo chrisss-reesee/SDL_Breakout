@@ -1,4 +1,5 @@
 #include "Environment.h"
+#include <iostream>
 
 
 Environment::Environment(SDL_Renderer* renderer) : renderer(renderer)
@@ -39,6 +40,28 @@ void Environment::draw()
 	SDL_RenderFillRect(renderer, &rightBorder);
 
 	SDL_RenderCopy(renderer, wall, NULL, NULL);
+
+	
+	SDL_SetTextureBlendMode(brickTexture, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderTarget(renderer, brickTexture);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	for (int i = 0, x = 65, y = 200; i < NUMBER_OF_BRICKS; i++, x += 62) {
+
+		if (x > 925) {
+			x = 65;
+			y += 22;
+		}
+
+		bricks[i].brick.x = x;
+		bricks[i].brick.y = y;
+
+		if (bricks[i].isActive) {
+			SDL_RenderFillRect(renderer, &bricks[i].brick);
+		}
+		
+	}
+	SDL_RenderCopy(renderer, brickTexture, NULL, NULL);
 	
 }
 

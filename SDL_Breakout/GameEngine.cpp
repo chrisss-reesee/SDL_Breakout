@@ -2,12 +2,14 @@
 #include <iostream>
 
 GameEngine::GameEngine() : screenWidth(1024), screenHeight(768), _window(nullptr), _renderer(nullptr), gameState(GameState::LAUNCH_PHASE),
-						   _ball(nullptr), _environment(nullptr), _bounce(nullptr), _explosion(nullptr), _paddle(nullptr)
+						   _ball(nullptr), _environment(nullptr), _bounce(nullptr), _brick(nullptr), _explosion(nullptr), _paddle(nullptr)
 {
 }
 
 GameEngine::~GameEngine()
 {
+	delete _brick;
+	_brick = nullptr;
 	Mix_FreeChunk(_explosion);
 	_explosion = nullptr;
 	Mix_FreeChunk(_bounce);
@@ -68,6 +70,9 @@ void GameEngine::loadMedia()
 	_ball = new Ball(_renderer, screenWidth, screenHeight, &gameState, _paddle);
 	_ball->renderer = _renderer;
 
+	_brick = new Brick();
+	_brick->renderer = _renderer;
+
 	// Audio //////////////////////////////////////////////////////////
 	// Ball Ricochet SFX
 	_bounce = Mix_LoadWAV("bounce.wav");
@@ -79,19 +84,17 @@ void GameEngine::loadMedia()
 	if (_explosion == NULL) {
 		std::cout << Mix_GetError() << std::endl;
 	}
-
 }
-
 
 void GameEngine::gameLoop()
 {
 	while (gameState != GameState::EXIT) {
 		handleInput();
-		_ball->checkCollision(&_paddle->playerPaddle, &_environment->leftBorder, &_environment->topBorder, &_environment->rightBorder, _bounce);
+		_ball->checkCollision(&_paddle->playerPaddle, &_environment->leftBorder, &_environment->topBorder, &_environment->rightBorder, _bounce, _environment);
 		update();
 		render();
 		checkGameState();
-		SDL_Delay(6);
+		SDL_Delay(12);
 	}
 }
 
@@ -133,9 +136,11 @@ void GameEngine::render()
 
 void GameEngine::update()
 {
-	_ball->update();
+	
 	_environment->update();
-	_paddle->update();	
+	_paddle->update();
+	_ball->update();
+
 }
 
 void GameEngine::checkGameState()
@@ -144,6 +149,6 @@ void GameEngine::checkGameState()
 	if (_ball->getBallYPos() > screenHeight) {
 		Mix_PlayChannel(-1, _explosion, 0);
 		gameState = GameState::LAUNCH_PHASE;
-		
+
 	}
 }

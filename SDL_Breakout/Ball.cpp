@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Ball::Ball(SDL_Renderer* renderer, int screenWidth, int screenHeight, GameState* gameState, Paddle* paddle) : _ballHeight(12), _ballWidth(12), _ballSpeed(2.0f),
+Ball::Ball(SDL_Renderer* renderer, int screenWidth, int screenHeight, GameState* gameState, Paddle* paddle) : _ballHeight(15), _ballWidth(15), _ballSpeed(1.0f),
 _xDirection(XDirection::RIGHT), _yDirection(YDirection::DOWN), currentGameState(gameState), paddle(paddle)
 {
 	// Create Texture
@@ -63,7 +63,7 @@ void Ball::movement()
 
 }
 
-void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder, Mix_Chunk* bounceSfx)
+void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder, Mix_Chunk* bounceSfx, Environment* environment)
 {
 	//Paddle Collision Box Definitions
 
@@ -91,6 +91,35 @@ void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topB
 		Mix_PlayChannel(-1, bounceSfx, 0);
 	}
 
+	// Ball / Brick Collisions
+	for (int i = 0; i < environment->NUMBER_OF_BRICKS; i++) {
+		
+		if (environment->bricks[i].isActive) {
+			// Bottom of Brick Check
+			if (SDL_HasIntersection(&_ball, &environment->bricks[i].brick)) {
+				if (_ball.y <= (environment->bricks[i].brick.y + environment->bricks[i].brick.h) && _ball.x >= environment->bricks[i].brick.x && _ball.x <= (environment->bricks[i].brick.x + environment->bricks[i].brick.w)) {
+					_yDirection = YDirection::DOWN;
+					environment->bricks[i].isActive = false;
+				} 
+				// Right Side of Brick Check
+				if (_ball.x <= (environment->bricks[i].brick.x + environment->bricks[i].brick.w) && _ball.x > environment->bricks[i].brick.x && _ball.y >= environment->bricks[i].brick.y && _ball.y <= (environment->bricks[i].brick.y - environment->bricks[i].brick.h)) {
+					_xDirection = XDirection::RIGHT;
+					environment->bricks[i].isActive = false;
+				} 
+				//// Left Side of Brick Check
+				if (_ball.x >= (environment->bricks[i].brick.x - _ball.w) && _ball.x < (environment->bricks[i].brick.x + environment->bricks[i].brick.w- _ball.w) &&  _ball.y >= environment->bricks[i].brick.y && _ball.y <= (environment->bricks[i].brick.y + environment->bricks[i].brick.h)) {
+					_xDirection = XDirection::LEFT;
+					environment->bricks[i].isActive = false;
+				}
+				// Top Brick Check
+				if (_ball.y >= (environment->bricks[i].brick.y - _ball.h) && _ball.x >= environment->bricks[i].brick.x && _ball.x <= (environment->bricks[i].brick.x + environment->bricks[i].brick.w)) {
+					_yDirection = YDirection::UP;
+					environment->bricks[i].isActive = false;
+				}
+			}
+		}
+		
+	}
 }
 
 void Ball::resetBall(float x, float y)

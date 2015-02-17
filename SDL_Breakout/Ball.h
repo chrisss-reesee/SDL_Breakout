@@ -4,6 +4,7 @@
 #include <SDL/SDL_mixer.h>
 #include <string>
 #include "GameStateManager.h"
+#include "Environment.h"
 
 
 enum class XDirection {LEFT, RIGHT};
@@ -18,7 +19,7 @@ public:
 	
 	void draw();
 	void update();
-	void checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder, Mix_Chunk* bounceSfx);
+	void checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topBorder, SDL_Rect* rightBorder, Mix_Chunk* bounceSfx, Environment* environment);
 	float getBallYPos() { return _ball.y; }
 	void resetBall(float x, float y);
 
