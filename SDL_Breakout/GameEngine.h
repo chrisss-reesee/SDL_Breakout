@@ -28,7 +28,13 @@ public:
 	int screenHeight;
 
 	GameState gameState;
+
+	const int FPS = 60;
+	const int DELAY_TIME = 1000.0f / FPS;
+
 private:
+	Uint32 frameStart, frameTime;
+
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
 

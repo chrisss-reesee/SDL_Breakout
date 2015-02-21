@@ -97,7 +97,7 @@ void Ball::checkCollision(SDL_Rect* paddle, SDL_Rect* leftBorder, SDL_Rect* topB
 		if (environment->bricks[i].isActive) {
 			// Bottom of Brick Check
 			if (SDL_HasIntersection(&_ball, &environment->bricks[i].brick)) {
-				if (_ball.y <= (environment->bricks[i].brick.y + environment->bricks[i].brick.h) && _ball.x >= environment->bricks[i].brick.x && _ball.x <= (environment->bricks[i].brick.x + environment->bricks[i].brick.w)) {
+				if (_ball.y <= (environment->bricks[i].brick.y + environment->bricks[i].brick.h) && _ball.x >= environment->bricks[i].brick.x - _ball.x && _ball.x <= (environment->bricks[i].brick.x + environment->bricks[i].brick.w)- _ball.w) {
 					_yDirection = YDirection::DOWN;
 					environment->bricks[i].isActive = false;
 				} 

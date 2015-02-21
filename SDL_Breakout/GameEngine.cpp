@@ -89,12 +89,20 @@ void GameEngine::loadMedia()
 void GameEngine::gameLoop()
 {
 	while (gameState != GameState::EXIT) {
+
+		frameStart = SDL_GetTicks();
+
 		handleInput();
 		_ball->checkCollision(&_paddle->playerPaddle, &_environment->leftBorder, &_environment->topBorder, &_environment->rightBorder, _bounce, _environment);
 		update();
 		render();
 		checkGameState();
-		SDL_Delay(12);
+		
+		frameTime = SDL_GetTicks() - frameStart;
+
+		if (frameTime < DELAY_TIME) {
+			SDL_Delay((int)(DELAY_TIME - frameTime));
+		}
 	}
 }
 
